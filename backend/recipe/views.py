@@ -112,7 +112,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
         ).values(
             'ingredient__name', 'ingredient__measurement_unit', 'amount'
         ).annotate(ingredient_total=Sum('amount'))
-
         file_name = 'shop_list.txt'
         lines = []
         for ingredient in ingredients:
