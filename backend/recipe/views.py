@@ -9,7 +9,7 @@ from django.http import HttpResponse
 from django.db.models import Sum
 
 from .filters import FavoriteFilter, IngredientFilter
-from .models import (Favorite, IngredientAmount, Ingredients,
+from .models import (Favorite, IngredientAmount, Ingredient,
                      Recipe, ShoppingCart, Tag)
 from .serializers import (CreateRecipeSerializer, FavoriteSerializer,
                           RecipeSerializer, ShoppingCartSerializer,
@@ -32,7 +32,7 @@ class IngredientsViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = None
     filter_backends = [DjangoFilterBackend]
     filterset_class = IngredientFilter
-    queryset = Ingredients.objects.all()
+    queryset = Ingredient.objects.all()
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -57,23 +57,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
         permission_classes=[permissions.IsAuthenticated, ]
     )
     def favorite(self, request, pk=None):
-        user = request.user
-        recipe = get_object_or_404(Recipe, pk=pk)
-        if request.method == 'POST':
-            if Favorite.objects.filter(user=user, recipe=recipe).exists():
-                return Response(
-                    'Рецепт уже добавлен в избранное',
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            favorite = Favorite.objects.create(user=user, recipe=recipe)
-            serializer = FavoriteSerializer(
-                favorite,
-                context={'request': request}
-                )
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
         if request.method == 'DELETE':
-            Favorite.objects.filter(user=user, recipe=recipe).delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return self.del_recipe(Favorite, request, pk)
+        return self.add_recipe(Favorite, FavoriteSerializer,
+                               request, pk
+                               )
 
     @action(
         detail=True,
@@ -81,26 +69,29 @@ class RecipeViewSet(viewsets.ModelViewSet):
         permission_classes=[permissions.IsAuthenticated, ]
     )
     def shopping_cart(self, request, pk=None):
-        user = request.user
-        recipe = get_object_or_404(Recipe, pk=pk)
-        if request.method == 'POST':
-            if ShoppingCart.objects.filter(user=user, recipe=recipe).exists():
-                return Response(
-                    'Уже добавлено в корзину',
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            shopping_cart = ShoppingCart.objects.create(
-                                                        user=user,
-                                                        recipe=recipe
-                                                        )
-            serializer = ShoppingCartSerializer(
-                shopping_cart,
-                context={'request': request}
-            )
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
         if request.method == 'DELETE':
-            ShoppingCart.objects.filter(user=user, recipe=recipe).delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return self.del_recipe(ShoppingCart, request, pk)
+        return self.add_recipe(ShoppingCart, ShoppingCartSerializer,
+                                request, pk
+                                )
+
+    def add_recipe(self, model, serializer, request, pk):
+        user = self.request.user
+        recipe = get_object_or_404(Recipe, pk=pk)
+        if model.objects.filter(user=user, recipe=recipe).exists():
+            return Response(
+                'Уже добавлено в корзину',
+                status=status.HTTP_400_BAD_REQUEST
+                )
+        obj = model.objects.create(user=user, recipe=recipe)
+        obj_serializer = serializer(obj, context={'request': request})
+        return Response(obj_serializer.data, status=status.HTTP_201_CREATED)
+
+    def del_recipe(self, model, request, pk):
+        user = self.request.user
+        recipe = get_object_or_404(Recipe, pk=pk)
+        model.objects.filter(user=user, recipe=recipe).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(
         detail=False,
@@ -117,7 +108,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         for ingredient in ingredients:
             name = ingredient['ingredient__name']
             measurement_unit = ingredient['ingredient__measurement_unit']
-            amount = ingredient['amount']
+            amount = ingredient['ingredient_total']
             lines.append(f'{name} {amount} ({measurement_unit})')
         content = '\n'.join(lines)
         content_type = 'text/plain,charset=utf8'

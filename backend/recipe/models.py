@@ -30,7 +30,7 @@ class Tag(models.Model):
         return self.name
 
 
-class Ingredients(models.Model):
+class Ingredient(models.Model):
     name = models.CharField(
         max_length=200,
         verbose_name='Название'
@@ -69,7 +69,7 @@ class Recipe(models.Model):
         verbose_name='Описание'
     )
     ingredients = models.ManyToManyField(
-        Ingredients,
+        Ingredient,
         through='IngredientAmount',
         verbose_name='Список ингредиентов',
     )
@@ -88,7 +88,7 @@ class Recipe(models.Model):
 
 class IngredientAmount(models.Model):
     ingredient = models.ForeignKey(
-        Ingredients,
+        Ingredient,
         on_delete=models.CASCADE,
         verbose_name='Ингридиент'
     )

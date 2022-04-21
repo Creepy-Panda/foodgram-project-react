@@ -5,7 +5,7 @@ load_dotenv()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = '*i&cam_e6xenm&i4m1rag#nprtlq37sxukjlhut3o9p#5#d5jv'
+SECRET_KEY = os.getenv('SECRET_KEY', default='*')
 
 DEBUG = True
 
