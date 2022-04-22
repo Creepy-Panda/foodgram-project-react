@@ -48,7 +48,7 @@ class RecipeSerializer(serializers.ModelSerializer):
                   'cooking_time']
 
     def get_image(self, obj):
-        return '/' + str(obj.image)
+        return obj.image.url
 
     def get_is_favorited(self, obj):
         request = self.context.get('request')
