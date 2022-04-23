@@ -7,7 +7,7 @@ services:
     env_file:
       - .env
   backend:
-    image: creepypanda/foodgram:latest
+    build: ../backend/
     restart: always
     depends_on:
       - db
