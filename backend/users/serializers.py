@@ -2,7 +2,6 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from recipe.models import Recipe
-
 from .models import CustomUser, Follow
 
 User = get_user_model()
