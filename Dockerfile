@@ -2,7 +2,9 @@ FROM python:3.7-slim
 
 WORKDIR /app
 
-COPY requirements.txt .
+COPY backend/requirements.txt .
+
+COPY backend/ /app
 
 RUN pip3 install -r requirements.txt
 
