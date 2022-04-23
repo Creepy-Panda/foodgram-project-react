@@ -102,6 +102,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
             recipe__shoppingcart__user=request.user
         ).values(
             'ingredient__name', 'ingredient__measurement_unit', 'amount'
+        ).order_by(
+            'ingredient__name'
         ).annotate(ingredient_total=Sum('amount'))
         file_name = 'shop_list.txt'
         lines = []
