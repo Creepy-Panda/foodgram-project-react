@@ -2,7 +2,7 @@ import csv
 
 from django.core.management import BaseCommand
 
-from recipe.models import Ingredients
+from recipe.models import Ingredient
 
 
 class Command(BaseCommand):
@@ -17,7 +17,7 @@ class Command(BaseCommand):
             data = csv.reader(csv_file)
             for row in data:
                 name, measurement_unit = row
-                Ingredients.objects.create(
+                Ingredient.objects.create(
                     name=name,
                     measurement_unit=measurement_unit,
                 )
