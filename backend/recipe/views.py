@@ -72,8 +72,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         if request.method == 'DELETE':
             return self.del_recipe(ShoppingCart, request, pk)
         return self.add_recipe(ShoppingCart, ShoppingCartSerializer,
-                                request, pk
-                                )
+                               request, pk
+                               )
 
     def add_recipe(self, model, serializer, request, pk):
         user = self.request.user
@@ -82,7 +82,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return Response(
                 'Уже добавлено в корзину',
                 status=status.HTTP_400_BAD_REQUEST
-                )
+            )
         obj = model.objects.create(user=user, recipe=recipe)
         obj_serializer = serializer(obj, context={'request': request})
         return Response(obj_serializer.data, status=status.HTTP_201_CREATED)

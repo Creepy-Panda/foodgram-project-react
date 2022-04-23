@@ -40,20 +40,20 @@ class CustomUserViewSet(UserViewSet):
                 return Response(
                     'Вы не можете подписаться на самого себя',
                     status=status.HTTP_400_BAD_REQUEST
-                    )
+                )
             if Follow.objects.filter(user=user, author=author).exists():
                 return Response(
                     'Подписка оформлена',
                     status=status.HTTP_400_BAD_REQUEST
-                    )
+                )
             follow = Follow.objects.create(user=user, author=author)
             serializer = FollowSerializer(
                 follow, context={'request': request}
-                )
+            )
         if request.method == 'DELETE':
             Follow.objects.filter(user=user, author=author).delete()
             return Response(
                 'Успешно отписались',
                 status=status.HTTP_204_NO_CONTENT
-                )
+            )
         return Response(serializer.data, status=status.HTTP_201_CREATED)
