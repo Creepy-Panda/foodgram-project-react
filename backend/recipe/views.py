@@ -101,18 +101,18 @@ class RecipeViewSet(viewsets.ModelViewSet):
         ingredients = IngredientAmount.objects.filter(
             recipe__shoppingcart__user=request.user
         ).values(
-            'ingredient__name', 'ingredient__measurement_unit', 'amount'
+            'ingredient__name', 'ingredient__measurement_unit'
         ).order_by(
             'ingredient__name'
         ).annotate(ingredient_total=Sum('amount'))
         file_name = 'shop_list.txt'
-        lines = []
+        ingredients_list = []
         for ingredient in ingredients:
             name = ingredient['ingredient__name']
             measurement_unit = ingredient['ingredient__measurement_unit']
             amount = ingredient['ingredient_total']
-            lines.append(f'{name} {amount} ({measurement_unit})')
-        content = '\n'.join(lines)
+            ingredients_list.append(f'{name} {amount} ({measurement_unit})')
+        content = '\n'.join(ingredients_list)
         content_type = 'text/plain,charset=utf8'
         response = HttpResponse(content, content_type=content_type)
         response['Content-Disposition'] = f'attachment; filename={file_name}'
