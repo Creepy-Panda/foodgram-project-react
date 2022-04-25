@@ -1,7 +1,5 @@
-# praktikum_new_diplom
-
 # Foodgram - продуктовый помощник
-![example workflow](https://github.com/Creepy-Panda/foodgram-project-react/workflows/main.yml/badge.svg)  
+![example workflow](https://github.com/Creepy-Panda/foodgram-project-react/actions/workflows/main.yml/badge.svg)  
 
 ## Стек технологий
 [![Python](https://img.shields.io/badge/-Python-464646?style=flat-square&logo=Python)](https://www.python.org/)
@@ -13,7 +11,7 @@
 [![docker](https://img.shields.io/badge/-Docker-464646?style=flat-square&logo=docker)](https://www.docker.com/)
 [![GitHub%20Actions](https://img.shields.io/badge/-GitHub%20Actions-464646?style=flat-square&logo=GitHub%20actions)](https://github.com/features/actions)
 ## Описание
-Продуктовый помощник»: сайт, на котором пользователи будут публиковать рецепты, добавлять чужие рецепты в избранное и подписываться на публикации других авторов. Сервис «Список покупок» позволит пользователям создавать список продуктов, которые нужно купить для приготовления выбранных блюд. 
+"Продуктовый помощник": сайт, на котором пользователи будут публиковать рецепты, добавлять чужие рецепты в избранное и подписываться на публикации других авторов. Сервис «Список покупок» позволит пользователям создавать список продуктов, которые нужно купить для приготовления выбранных блюд. 
 
 [Ссылка на проект](51.250.100.88)
 
