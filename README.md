@@ -44,5 +44,3 @@ docker-compose exec backend python manage.py createsuperuser
 docker-compose exec backend python manage.py collectstatic --no-input
 docker-compose exec backend python manage.py import_csv data/ingredients.csv
 ```
-login - admin@admin.ru
-password - admin
